@@ -2,6 +2,10 @@
 
 A modern, responsive link-sharing platform built with React and Tailwind CSS. Create your personalized link-sharing page with a clean, mobile-friendly interface.
 
+## 🌐 Live Demo
+
+Visit the live demo at: [https://phadkesharan.github.io/linktree-clone](https://phadkesharan.github.io/linktree-clone)
+
 ## 🚀 Features
 
 - **User Profile Management**
@@ -27,12 +31,13 @@ A modern, responsive link-sharing platform built with React and Tailwind CSS. Cr
 - **Styling**: Tailwind CSS
 - **Form Handling**: React Hooks
 - **Additional Plugins**: @tailwindcss/forms
+- **Deployment**: GitHub Pages
 
 ## 🛠️ Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/linktree-clone.git
+   git clone https://github.com/phadkesharan/linktree-clone.git
    cd linktree-clone
    ```
 
@@ -46,10 +51,21 @@ A modern, responsive link-sharing platform built with React and Tailwind CSS. Cr
    npm run dev
    ```
 
-4. Open your browser and visit:
+## 🚀 Deployment
+
+The project is configured for GitHub Pages deployment. To deploy your own version:
+
+1. Update the `homepage` field in `package.json` with your GitHub Pages URL:
+   ```json
+   "homepage": "https://your-username.github.io/linktree-clone"
    ```
-   http://localhost:5173
+
+2. Deploy to GitHub Pages:
+   ```bash
+   npm run deploy
    ```
+
+Your site will be available at `https://your-username.github.io/linktree-clone`
 
 ## 📦 Project Structure
 
@@ -128,12 +144,12 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/yourusername/linktree-clone/issues).
+Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/phadkesharan/linktree-clone/issues).
 
 ## 👨‍💻 Author
 
-Your Name
-- GitHub: [@yourusername](https://github.com/yourusername)
+Phadke Sharan
+- GitHub: [@phadkesharan](https://github.com/phadkesharan)
 
 ## 🙏 Acknowledgments
 
