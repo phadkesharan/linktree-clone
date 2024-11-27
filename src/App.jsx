@@ -1,92 +1,92 @@
 import { useState } from 'react';
+import Preview from './components/Preview';
 import UserProfileForm from './components/UserProfileForm';
 import SocialLinksManager from './components/SocialLinksManager';
-import Preview from './components/Preview';
 
 function App() {
-  const [profile, setProfile] = useState(null);
-  const [links, setLinks] = useState([]);
   const [activeTab, setActiveTab] = useState('profile');
+  const [profile, setProfile] = useState({
+    name: '',
+    bio: '',
+    avatarUrl: ''
+  });
+  const [links, setLinks] = useState([]);
 
-  const handleProfileSave = (profileData) => {
-    setProfile(profileData);
-    setActiveTab('links');
+  const handleProfileUpdate = (field, value) => {
+    setProfile(prevProfile => ({
+      ...prevProfile,
+      [field]: value
+    }));
   };
 
-  const handleLinksSave = (linksData) => {
-    setLinks(linksData);
+  const handleAddLink = (newLink) => {
+    setLinks(prevLinks => [...prevLinks, newLink]);
   };
 
-  const renderEditor = () => {
-    switch (activeTab) {
-      case 'profile':
-        return <UserProfileForm onSave={handleProfileSave} />;
-      case 'links':
-        return <SocialLinksManager onSave={handleLinksSave} />;
-      default:
-        return null;
-    }
+  const handleRemoveLink = (index) => {
+    setLinks(prevLinks => prevLinks.filter((_, i) => i !== index));
+  };
+
+  const handleUpdateLink = (index, updatedLink) => {
+    setLinks(prevLinks => {
+      const newLinks = [...prevLinks];
+      newLinks[index] = updatedLink;
+      return newLinks;
+    });
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 w-screen overflow-x-hidden">
-      <nav className="w-full bg-white shadow-sm">
-        <div className="container mx-auto px-2">
-          <div className="flex justify-between h-16">
-            <div className="flex-shrink-0 flex items-center">
-              <h1 className="text-2xl font-bold text-gray-900">LinkTree Clone</h1>
-            </div>
-            <div className="flex space-x-4 items-center">
+    <div className="min-h-screen w-full bg-gray-50">
+      <div className="flex h-screen w-full">
+        {/* Editor Section (75%) */}
+        <div className="w-3/4 h-full p-8 overflow-y-auto">
+          <div className="w-full max-w-4xl mx-auto">
+            <h1 className="text-3xl font-bold text-gray-800 mb-8">LinkTree Clone</h1>
+
+            {/* Tabs */}
+            <div className="flex space-x-4 mb-8">
               <button
                 onClick={() => setActiveTab('profile')}
-                className={`px-6 py-2 rounded-lg ${
+                className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
                   activeTab === 'profile'
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'bg-white text-purple-500 hover:bg-purple-50 border border-gray-200'
                 }`}
               >
                 Profile
               </button>
               <button
                 onClick={() => setActiveTab('links')}
-                className={`px-6 py-2 rounded-lg ${
+                className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
                   activeTab === 'links'
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-50'
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'bg-white text-purple-500 hover:bg-purple-50 border border-gray-200'
                 }`}
               >
                 Links
               </button>
             </div>
-          </div>
-        </div>
-      </nav>
 
-      <div className="w-screen flex flex-col lg:flex-row">
-        <div className="w-full lg:w-9/12">
-          <div className="bg-white m-1">
-            <div className="p-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                Live Preview
-              </h2>
-              <div className="bg-gray-50 p-4 min-h-[700px] flex items-center justify-center">
-                <div className="w-[420px]">
-                  <Preview profile={profile} links={links} />
-                </div>
-              </div>
-            </div>
+            {/* Active Tab Content */}
+            {activeTab === 'profile' ? (
+              <UserProfileForm 
+                profile={profile} 
+                onUpdateProfile={handleProfileUpdate}
+              />
+            ) : (
+              <SocialLinksManager
+                links={links}
+                onAddLink={handleAddLink}
+                onRemoveLink={handleRemoveLink}
+                onUpdateLink={handleUpdateLink}
+              />
+            )}
           </div>
         </div>
 
-        <div className="w-full lg:w-3/12">
-          <div className="bg-white m-1">
-            <div className="p-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                {activeTab === 'profile' ? 'Edit Profile' : 'Manage Links'}
-              </h2>
-              {renderEditor()}
-            </div>
-          </div>
+        {/* Preview Section (25%) */}
+        <div className="w-1/4 h-full border-l border-gray-200 overflow-y-auto">
+          <Preview profile={profile} links={links} />
         </div>
       </div>
     </div>

@@ -1,96 +1,77 @@
-import { useState } from 'react';
+import React from 'react';
 
-const SocialLinksManager = ({ onSave }) => {
-  const [links, setLinks] = useState([{ title: '', url: '' }]);
-
+const SocialLinksManager = ({ links, onAddLink, onRemoveLink, onUpdateLink }) => {
   const handleAddLink = () => {
-    setLinks([...links, { title: '', url: '' }]);
+    onAddLink({ title: '', url: '' });
   };
 
-  const handleRemoveLink = (index) => {
-    const newLinks = links.filter((_, i) => i !== index);
-    setLinks(newLinks);
-  };
-
-  const handleLinkChange = (index, field, value) => {
-    const newLinks = [...links];
-    newLinks[index][field] = value;
-    setLinks(newLinks);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSave(links.filter(link => link.title && link.url));
+  const handleUpdateLink = (index, field, value) => {
+    const updatedLink = {
+      ...links[index],
+      [field]: value
+    };
+    onUpdateLink(index, updatedLink);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full space-y-6">
-      <div className="w-full space-y-4">
+    <div className="space-y-6">
+      {/* Links List */}
+      <div className="space-y-4">
         {links.map((link, index) => (
-          <div
-            key={index}
-            className="group relative bg-white rounded-lg border border-gray-200 p-4 hover:border-gray-300 transition-colors duration-200 w-full"
-          >
-            <div className="space-y-3 w-full">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Link Title
-                </label>
-                <input
-                  type="text"
-                  value={link.title}
-                  onChange={(e) => handleLinkChange(index, 'title', e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  placeholder="GitHub"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  URL
-                </label>
-                <input
-                  type="url"
-                  value={link.url}
-                  onChange={(e) => handleLinkChange(index, 'url', e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  placeholder="https://github.com/yourusername"
-                  required
-                />
-              </div>
+          <div key={index} className="flex gap-4">
+            <div className="flex-grow space-y-3">
+              <input
+                type="text"
+                value={link.title || ''}
+                onChange={(e) => handleUpdateLink(index, 'title', e.target.value)}
+                placeholder="Link Title"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 text-gray-900"
+              />
+              <input
+                type="url"
+                value={link.url || ''}
+                onChange={(e) => handleUpdateLink(index, 'url', e.target.value)}
+                placeholder="URL (https://...)"
+                className="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 text-gray-900"
+              />
             </div>
-            {links.length > 1 && (
-              <button
-                type="button"
-                onClick={() => handleRemoveLink(index)}
-                className="absolute top-2 right-2 text-gray-400 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+            <button
+              onClick={() => onRemoveLink(index)}
+              className="self-center p-2 text-gray-400 hover:text-red-500"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </button>
-            )}
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
+            </button>
           </div>
         ))}
       </div>
-      
-      <div className="space-y-4 w-full">
-        <button
-          type="button"
-          onClick={handleAddLink}
-          className="w-full py-2 px-4 border-2 border-dashed border-gray-300 rounded-lg text-sm font-medium text-gray-600 hover:border-indigo-500 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
-        >
-          Add New Link
-        </button>
-        
-        <button
-          type="submit"
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Save Links
-        </button>
-      </div>
-    </form>
+
+      {/* Add Link Button */}
+      <button
+        onClick={handleAddLink}
+        className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+      >
+        Add New Link
+      </button>
+
+      {/* Help Text */}
+      {links.length === 0 && (
+        <div className="text-center text-gray-500 mt-4">
+          <p>No links added yet. Click the button above to add your first link!</p>
+        </div>
+      )}
+    </div>
   );
 };
 
